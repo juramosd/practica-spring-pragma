@@ -1,0 +1,16 @@
+#Application Configuration
+server:
+  port: 8002
+  error:
+    include-message: always
+spring:
+  application:
+    name: photo-service
+  data:
+    mongodb:
+      authentication-database: admin
+      username: mongoadmin
+      password: toor
+      database: prueba_bd
+      port: 27017
+      host: localhost

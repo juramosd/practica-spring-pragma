@@ -1,0 +1,16 @@
+#Application Configuration
+server:
+  port: 8001
+  error:
+    include-message: always
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bd_prueba
+    username: root
+    password: $P@ssw0rd2018
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
