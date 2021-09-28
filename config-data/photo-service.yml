@@ -14,3 +14,7 @@ spring:
       database: prueba_bd
       port: 27017
       host: localhost
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
