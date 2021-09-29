@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository("repositoryFeign")
@@ -30,17 +27,16 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public List<CustomerDto> getAll() {
         List<Customer> customers = (List<Customer>)customerCrudRepository.findAll();
-        //List<CustomerPhoto> images = Arrays.asList(restTemplatePhoto.getForObject("http://localhost:8002/clientes-fotos/", CustomerPhoto[].class));
         List<CustomerPhoto> images = customerFeign.listAllCustomersPhotos().getBody();
         List<CustomerDto> customersDto =  customerMapper.toCustomersDto(customers);
-        if(!images.isEmpty()){
-           return customersDto.stream().map(f-> {
-               var imageDto = images.stream().filter(g->g.getIdPhoto().contentEquals(f.getIdentification())).findFirst();
-               if(!imageDto.isEmpty()) {
-                   f.setPhoto(imageDto.get());
-               }
-               return f;
-           }).collect(Collectors.toList());
+        if(!images.get(0).getIdPhoto().contentEquals("none")){
+            customersDto.forEach(customerDto -> {
+                var imageDto = images.stream().filter(g->g.getIdPhoto().contentEquals(customerDto.getIdentification())).findFirst();
+                if(!imageDto.isEmpty()) {
+                    customerDto.setPhoto(imageDto.get());
+                }
+            });
+           return customersDto;
         }
 
         return customerMapper.toCustomersDto(customers);
@@ -68,12 +64,16 @@ public class CustomerRepository implements ICustomerRepository {
         customerBD.setCreateAt(new Date());
         customerBD = customerCrudRepository.save(customerBD);
         CustomerPhoto photo = customerFeign.getCustomerPhoto(customerDto.getIdentification()).getBody();
-        photo.setIdPhoto(customerDto.getIdentification());
-        photo.setNameFile(customerDto.getPhoto().getNameFile());
-        photo.setContentFile(customerDto.getPhoto().getContentFile());
-        if(photo !=null){
+
+        if(!photo.getIdPhoto().contentEquals("none")){
+            photo.setIdPhoto(customerDto.getIdentification());
+            photo.setNameFile(customerDto.getPhoto().getNameFile());
+            photo.setContentFile(customerDto.getPhoto().getContentFile());
             photo = customerFeign.updateCustomer(photo.getIdPhoto(),photo).getBody();
         }else{
+            photo.setIdPhoto(customerDto.getIdentification());
+            photo.setNameFile(customerDto.getPhoto().getNameFile());
+            photo.setContentFile(customerDto.getPhoto().getContentFile());
             photo = customerFeign.createCustomerPhoto(photo).getBody();
         }
         Optional<CustomerDto> dto = Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
