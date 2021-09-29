@@ -16,9 +16,9 @@ spring:
         - id: customer-service
           uri: lb://customer-service
           predicates:
-            - Path=/customers/**
+            - Path=/clientes/**
         - id: photo-service
           uri: lb://photo-service
           predicates:
-            - Path=/photos/**
+            - Path=/clientes-fotos/**
         
