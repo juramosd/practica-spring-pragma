@@ -31,10 +31,10 @@ public class Customer {
     @Size(min = 8, max=10, message = "Tiene que ser mayor o igual a 8 caracteres")
     @Column(unique = true,nullable = false)
     private String identification;
-    @NotEmpty
     @Min(value = 0, message = "Tiene que ser entero positivo")
     private int age;
     private String city;
+    private String state;
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
     private Date createAt;

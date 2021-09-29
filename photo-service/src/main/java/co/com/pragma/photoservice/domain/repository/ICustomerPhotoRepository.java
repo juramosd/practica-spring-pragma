@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public interface ICustomerPhotoRepository {
     List<CustomerPhotoDto> getAll();
-    List<CustomerPhotoDto> findAllByIdIn(List<Long> listIn);
-    CustomerPhotoDto get(long customerId);
-    CustomerPhotoDto save(CustomerPhotoDto customerDto);
-    CustomerPhotoDto modify(CustomerPhotoDto customerDto);
-    CustomerPhotoDto delete(CustomerPhotoDto customerDto);
+    List<CustomerPhotoDto> findAllByIdIn(List<String> listIn);
+    Optional<CustomerPhotoDto> getCustomerPhoto(String customerId);
+    Optional<CustomerPhotoDto> save(CustomerPhotoDto customerDto);
+    Optional<CustomerPhotoDto> modify(CustomerPhotoDto customerDto);
+    Optional<CustomerPhotoDto> delete(CustomerPhotoDto customerDto);
 }

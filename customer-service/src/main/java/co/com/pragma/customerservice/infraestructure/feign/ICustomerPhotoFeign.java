@@ -1,18 +1,21 @@
 package co.com.pragma.customerservice.infraestructure.feign;
 
 import co.com.pragma.customerservice.domain.model.CustomerPhoto;
+import co.com.pragma.customerservice.infraestructure.fallback.CustomerHystrixFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "photo-service",url = "http://localhost:8002/",path = "")
-@RequestMapping("/clientes-fotos")
+@FeignClient(name = "photo-service", fallback = CustomerHystrixFactory.class)
 public interface ICustomerPhotoFeign {
-    @GetMapping
-    List<CustomerPhoto> listAllCustomersPhotos();
-    @GetMapping(value = "/{id}")
-    CustomerPhoto getProductCustomerPhoto(@PathVariable("id") Long id);
+    @GetMapping(value = "/photos")
+    ResponseEntity<List<CustomerPhoto>> listAllCustomersPhotos();
+    @GetMapping(value = "/photos/{id}")
+    ResponseEntity<CustomerPhoto> getCustomerPhoto(@PathVariable("id") String id);
+    @PostMapping(value="/photos")
+    ResponseEntity<CustomerPhoto> createCustomerPhoto(@RequestBody CustomerPhoto customer);
+    @PutMapping(value = "/photos/{id}")
+    ResponseEntity<CustomerPhoto> updateCustomer(@PathVariable("id") String id, @RequestBody CustomerPhoto customer);
 }

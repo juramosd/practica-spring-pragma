@@ -31,14 +31,13 @@ public class CustomerRepository implements ICustomerRepository {
     public List<CustomerDto> getAll() {
         List<Customer> customers = (List<Customer>)customerCrudRepository.findAll();
         //List<CustomerPhoto> images = Arrays.asList(restTemplatePhoto.getForObject("http://localhost:8002/clientes-fotos/", CustomerPhoto[].class));
-        List<CustomerPhoto> images = customerFeign.listAllCustomersPhotos();
+        List<CustomerPhoto> images = customerFeign.listAllCustomersPhotos().getBody();
         List<CustomerDto> customersDto =  customerMapper.toCustomersDto(customers);
         if(!images.isEmpty()){
            return customersDto.stream().map(f-> {
-               var imageDto = images.stream().filter(g->g.getIdPhoto()==f.getCustomerId()).findFirst();
+               var imageDto = images.stream().filter(g->g.getIdPhoto().contentEquals(f.getIdentification())).findFirst();
                if(!imageDto.isEmpty()) {
-                   f.setContentImage(imageDto.get().getContentFile());
-                   f.setNameFile(imageDto.get().getNameFile());
+                   f.setPhoto(imageDto.get());
                }
                return f;
            }).collect(Collectors.toList());
@@ -47,13 +46,12 @@ public class CustomerRepository implements ICustomerRepository {
         return customerMapper.toCustomersDto(customers);
     }
 
-    public Optional<CustomerDto> getCustomer(long customerId) {
+    public Optional<CustomerDto> getCustomer(Long customerId) {
         return  customerCrudRepository.findById(customerId).map(e -> {
-            var imageCustomer = customerFeign.getProductCustomerPhoto(customerId);
+            var imageCustomer = customerFeign.getCustomerPhoto(e.getIdentification());
             var dto = customerMapper.toCustomerDTo(e);
             if(imageCustomer!=null){
-                dto.setContentImage(imageCustomer.getContentFile());
-                dto.setNameFile(imageCustomer.getNameFile());
+                dto.setPhoto(imageCustomer.getBody());
             }
             return dto;
         });
@@ -65,9 +63,22 @@ public class CustomerRepository implements ICustomerRepository {
         if(customerBD != null){
             return Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
         }
+        customerBD = customerMapper.toCustomer(customerDto);
+        customerBD.setState("CREATED");
         customerBD.setCreateAt(new Date());
-        customerBD = customerCrudRepository.save(customerMapper.toCustomer(customerDto));
-        return Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
+        customerBD = customerCrudRepository.save(customerBD);
+        CustomerPhoto photo = customerFeign.getCustomerPhoto(customerDto.getIdentification()).getBody();
+        photo.setIdPhoto(customerDto.getIdentification());
+        photo.setNameFile(customerDto.getPhoto().getNameFile());
+        photo.setContentFile(customerDto.getPhoto().getContentFile());
+        if(photo !=null){
+            photo = customerFeign.updateCustomer(photo.getIdPhoto(),photo).getBody();
+        }else{
+            photo = customerFeign.createCustomerPhoto(photo).getBody();
+        }
+        Optional<CustomerDto> dto = Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
+        dto.get().setPhoto(photo);
+        return  dto;
     }
 
     @Override
@@ -76,8 +87,22 @@ public class CustomerRepository implements ICustomerRepository {
         if(customerBD == null){
             return null;
         }
-        customerBD = customerCrudRepository.save(customerMapper.toCustomer(customerDto));
-        return Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
+        customerBD = customerMapper.toCustomer(customerDto);
+        customerBD.setState("MODIFY");
+        customerBD = customerCrudRepository.save(customerBD);
+
+        CustomerPhoto photo = customerFeign.getCustomerPhoto(customerDto.getIdentification()).getBody();
+        photo.setIdPhoto(customerDto.getIdentification());
+        photo.setNameFile(customerDto.getPhoto().getNameFile());
+        photo.setContentFile(customerDto.getPhoto().getContentFile());
+        if(photo !=null){
+            photo = customerFeign.updateCustomer(photo.getIdPhoto(),photo).getBody();
+        }else{
+            photo = customerFeign.createCustomerPhoto(photo).getBody();
+        }
+        Optional<CustomerDto> dto = Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
+        dto.get().setPhoto(photo);
+        return dto;
     }
 
     @Override
@@ -86,13 +111,29 @@ public class CustomerRepository implements ICustomerRepository {
         if(customerBD == null){
             return null;
         }
-        customerCrudRepository.delete(customerMapper.toCustomer(customerBD.get()));
-        return customerBD;
+        Customer customer = customerMapper.toCustomer(customerBD.get());
+        customer.setState("DELETED");
+        //customerCrudRepository.delete(customerMapper.toCustomer(customerBD.get()));
+        customer = customerCrudRepository.save(customer);
+        return Optional.ofNullable(customerMapper.toCustomerDTo(customer));
     }
 
     @Override
     public List<CustomerDto> findByAgeGreaterThanEqual(int age) {
         List<Customer> customers = (List<Customer>)customerCrudRepository.findByAgeGreaterThanEqual(age);
+
+        List<CustomerPhoto> images = customerFeign.listAllCustomersPhotos().getBody();
+        List<CustomerDto> customersDto =  customerMapper.toCustomersDto(customers);
+        if(!images.isEmpty()){
+            return customersDto.stream().map(f-> {
+                var imageDto = images.stream().filter(g->g.getIdPhoto().contentEquals(f.getIdentification())).findFirst();
+                if(!imageDto.isEmpty()) {
+                    f.setPhoto(imageDto.get());
+                }
+                return f;
+            }).collect(Collectors.toList());
+        }
+
         return customerMapper.toCustomersDto(customers);
     }
 }

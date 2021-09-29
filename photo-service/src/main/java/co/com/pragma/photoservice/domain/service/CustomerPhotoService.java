@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerPhotoService implements ICustomerPhotoService {
@@ -21,27 +22,27 @@ public class CustomerPhotoService implements ICustomerPhotoService {
     }
 
     @Override
-    public List<CustomerPhotoDto> getAllForId(List<Long> ids) {
+    public List<CustomerPhotoDto> getAllForId(List<String> ids) {
         return customerRepository.findAllByIdIn(ids);
     }
 
     @Override
-    public CustomerPhotoDto create(CustomerPhotoDto customer) {
+    public Optional<CustomerPhotoDto> create(CustomerPhotoDto customer) {
         return customerRepository.save(customer);
     }
 
     @Override
-    public CustomerPhotoDto get(Long id) {
-        return customerRepository.get(id);
+    public Optional<CustomerPhotoDto> getCustomerPhoto(String id) {
+        return customerRepository.getCustomerPhoto(id);
     }
 
     @Override
-    public CustomerPhotoDto update(CustomerPhotoDto customer) {
+    public Optional<CustomerPhotoDto> update(CustomerPhotoDto customer) {
         return customerRepository.modify(customer);
     }
 
     @Override
-    public CustomerPhotoDto delete(CustomerPhotoDto customer) {
+    public Optional<CustomerPhotoDto> delete(CustomerPhotoDto customer) {
         return customerRepository.delete(customer);
     }
 }

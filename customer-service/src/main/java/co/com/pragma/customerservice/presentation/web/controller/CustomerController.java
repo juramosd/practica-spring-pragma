@@ -6,6 +6,7 @@ import co.com.pragma.customerservice.presentation.web.util.UtilityExtensions;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,13 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RefreshScope
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/customers")
 public class CustomerController {
     @Autowired
     ICustomerService customerService;
 
-    @ApiOperation("Get all products.")
+    @ApiOperation("Get all customers.")
     @ApiResponse(code = 200, message = "SUCCESS")
     @GetMapping
     public ResponseEntity<List<CustomerDto>> listAllCustomers(@RequestParam(name = "maxAge", required = false, defaultValue = "false") boolean maxAge) {
@@ -50,7 +52,7 @@ public class CustomerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") long id, @RequestBody CustomerDto customer) {
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDto customer) {
 
         Optional<CustomerDto> currentCustomer = customerService.getCustomer(id);
 

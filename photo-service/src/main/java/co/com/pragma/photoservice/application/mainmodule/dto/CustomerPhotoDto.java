@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 @Builder
 public class CustomerPhotoDto {
     @Indexed(unique = true)
-    private Long idPhoto;
+    private String idPhoto;
 
     @Indexed(unique = true)
     private String nameFile;

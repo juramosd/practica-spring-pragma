@@ -1,5 +1,6 @@
 package co.com.pragma.customerservice.application.mainmodule.dto;
 
+import co.com.pragma.customerservice.domain.model.CustomerPhoto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,5 @@ public class CustomerDto {
     @Min(value = 0, message = "Tiene que ser entero positivo")
     private int age;
     private String city;
-    private String nameFile;
-    private byte[] contentImage;
+    private CustomerPhoto photo;
 }

@@ -17,7 +17,8 @@ public interface ICustomerMapper {
             @Mapping(source = "firstName", target = "firstName"),
             @Mapping(source = "identification", target = "identification"),
             @Mapping(source = "age", target = "age"),
-            @Mapping(source = "city", target = "city")
+            @Mapping(source = "city", target = "city"),
+            @Mapping(target = "photo", ignore = true)
     })
     CustomerDto toCustomerDTo(Customer customer);
 
@@ -25,7 +26,8 @@ public interface ICustomerMapper {
 
     @InheritInverseConfiguration
     @Mappings({
-            @Mapping(target = "createAt", ignore = true)
+            @Mapping(target = "createAt", ignore = true),
+            @Mapping(target = "state", ignore = true)
     })
     Customer toCustomer(CustomerDto customerDto);
 }

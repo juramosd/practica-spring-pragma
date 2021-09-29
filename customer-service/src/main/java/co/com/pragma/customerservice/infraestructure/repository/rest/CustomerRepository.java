@@ -37,10 +37,9 @@ public class CustomerRepository implements ICustomerRepository {
         List<CustomerDto> customersDto =  customerMapper.toCustomersDto(customers);
         if(!images.isEmpty()){
            return customersDto.stream().map(f-> {
-               var imageDto = images.stream().filter(g->g.getIdPhoto()==f.getCustomerId()).findFirst();
+               var imageDto = images.stream().filter(g->g.getIdPhoto()==f.getIdentification()).findFirst();
                if(!imageDto.isEmpty()) {
-                   f.setContentImage(imageDto.get().getContentFile());
-                   f.setNameFile(imageDto.get().getNameFile());
+                   f.setPhoto(imageDto.get());
                }
                return f;
            }).collect(Collectors.toList());
@@ -49,13 +48,12 @@ public class CustomerRepository implements ICustomerRepository {
         return customerMapper.toCustomersDto(customers);
     }
 
-    public Optional<CustomerDto> getCustomer(long customerId) {
+    public Optional<CustomerDto> getCustomer(Long customerId) {
         return  customerCrudRepository.findById(customerId).map(e -> {
             Optional<CustomerPhoto> imageCustomer = Arrays.asList(restTemplatePhoto.getForObject("http://localhost:8002/clientes-fotos/{id}", CustomerPhoto[].class,customerId)).stream().findFirst();
             var dto = customerMapper.toCustomerDTo(e);
             if(imageCustomer!=null){
-                dto.setContentImage(imageCustomer.get().getContentFile());
-                dto.setNameFile(imageCustomer.get().getNameFile());
+                dto.setPhoto(imageCustomer.get());
             }
             return dto;
         });
@@ -67,6 +65,7 @@ public class CustomerRepository implements ICustomerRepository {
         if(customerBD != null){
             return Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
         }
+
         customerBD.setCreateAt(new Date());
         customerBD = customerCrudRepository.save(customerMapper.toCustomer(customerDto));
         return Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));

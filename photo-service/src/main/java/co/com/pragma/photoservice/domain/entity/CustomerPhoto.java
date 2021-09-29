@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class CustomerPhoto {
     @Id
     @Field("id_image")
-    private Long id;
+    private String id;
 
     @Indexed(unique = true)
     @Field("name_file")

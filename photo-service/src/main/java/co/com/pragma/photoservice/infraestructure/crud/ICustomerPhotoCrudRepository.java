@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface ICustomerPhotoCrudRepository extends MongoRepository<CustomerPhoto,Long> {
-    List<CustomerPhoto> findAllByIdIn(List<Long> listIn);
+public interface ICustomerPhotoCrudRepository extends MongoRepository<CustomerPhoto,String> {
+    List<CustomerPhoto> findAllByIdIn(List<String> listIn);
 }
