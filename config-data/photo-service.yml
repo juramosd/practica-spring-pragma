@@ -9,11 +9,11 @@ spring:
   data:
     mongodb:
       authentication-database: admin
-      username: mongoadmin
-      password: toor
+      username: AdminRoot
+      password: M0ng0RD++
       database: prueba_bd
       port: 27017
-      host: localhost
+      host: 142.93.51.124:27017
 eureka:
   instance:
     prefer-ip-address: true

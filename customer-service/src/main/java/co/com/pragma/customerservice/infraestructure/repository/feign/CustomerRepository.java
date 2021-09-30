@@ -57,7 +57,16 @@ public class CustomerRepository implements ICustomerRepository {
     public Optional<CustomerDto> save(CustomerDto customerDto) {
         Customer customerBD = customerCrudRepository.findByIdentification(customerDto.getIdentification());
         if(customerBD != null){
-            return Optional.ofNullable(customerMapper.toCustomerDTo(customerBD));
+            CustomerPhoto photo = customerFeign.getCustomerPhoto(customerDto.getIdentification()).getBody();
+            if(!photo.getIdPhoto().contentEquals("none")){
+                photo.setIdPhoto(customerDto.getIdentification());
+                photo.setNameFile(customerDto.getPhoto().getNameFile());
+                photo.setContentFile(customerDto.getPhoto().getContentFile());
+                customerDto = customerMapper.toCustomerDTo(customerBD);
+                customerDto.setPhoto(photo);
+            }
+
+            return  Optional.ofNullable(customerDto);
         }
         customerBD = customerMapper.toCustomer(customerDto);
         customerBD.setState("CREATED");
@@ -65,12 +74,7 @@ public class CustomerRepository implements ICustomerRepository {
         customerBD = customerCrudRepository.save(customerBD);
         CustomerPhoto photo = customerFeign.getCustomerPhoto(customerDto.getIdentification()).getBody();
 
-        if(!photo.getIdPhoto().contentEquals("none")){
-            photo.setIdPhoto(customerDto.getIdentification());
-            photo.setNameFile(customerDto.getPhoto().getNameFile());
-            photo.setContentFile(customerDto.getPhoto().getContentFile());
-            photo = customerFeign.updateCustomer(photo.getIdPhoto(),photo).getBody();
-        }else{
+        if(photo.getIdPhoto().contentEquals("none")){
             photo.setIdPhoto(customerDto.getIdentification());
             photo.setNameFile(customerDto.getPhoto().getNameFile());
             photo.setContentFile(customerDto.getPhoto().getContentFile());

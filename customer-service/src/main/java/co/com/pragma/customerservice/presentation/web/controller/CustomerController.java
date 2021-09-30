@@ -28,10 +28,10 @@ public class CustomerController {
     @ApiOperation("Get all customers.")
     @ApiResponse(code = 200, message = "SUCCESS")
     @GetMapping
-    public ResponseEntity<List<CustomerDto>> listAllCustomers(@RequestParam(name = "maxAge", required = false, defaultValue = "false") boolean maxAge) {
+    public ResponseEntity<List<CustomerDto>> listAllCustomers(@RequestParam(name = "maxAge", required = false, defaultValue = "0") int maxAge) {
         List<CustomerDto> customers = new ArrayList<>();
-        if (maxAge) {
-            customers = customerService.getCustomerAgeMax(18);
+        if (maxAge!=0) {
+            customers = customerService.getCustomerAgeMax(maxAge);
         } else {
             customers = customerService.getAll();
         }
