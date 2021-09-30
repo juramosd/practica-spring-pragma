@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://142.93.51.124:3306/bd_prueba
+    url: jdbc:mysql://142.93.51.124:3306/prueba_bd
     username: userPrueba
     password: p4s$w0rD
   jpa:
