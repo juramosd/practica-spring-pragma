@@ -7,8 +7,8 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://142.93.51.124:3306/bd_prueba
-    username: userbd2
-    password: $P4ssw0rds
+    username: userPrueba
+    password: p4s$w0rD
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
