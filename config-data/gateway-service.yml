@@ -26,19 +26,19 @@ spring:
           uri: lb://customer-service
           predicates:
             - Path=/customers/**
-          filters:
-          - name: CustomerCircuitBreaker
-            args:
-              name: customerCircuitBreaker
-              fallbackUri: forward:/customer-fallback
+          #filters:
+          #- name: CustomerCircuitBreaker
+          #  args:
+          #    name: customerCircuitBreaker
+          #    fallbackUri: forward:/customer-fallback
         - id: photo-service
           uri: lb://photo-service
           predicates:
             - Path=/photos/**
-          filters:
-          - name: PhotoCircuitBreaker
-            args:
-              name: photoCircuitBreaker
-              fallbackUri: forward:/photo-fallback
+          #filters:
+          #- name: PhotoCircuitBreaker
+          #  args:
+          #    name: photoCircuitBreaker
+          #    fallbackUri: forward:/photo-fallback
 
         
