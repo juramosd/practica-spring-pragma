@@ -5,6 +5,7 @@ eureka:
   instance:
     hostname: localhost
     prefer-ip-address: true
+    instace-id: ${spring.application.name}-${random.uuid}
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -13,6 +14,9 @@ eureka:
 
 spring:
   cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
     gateway:
       discovery:
         locator:
