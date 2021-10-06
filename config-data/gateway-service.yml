@@ -23,7 +23,11 @@ spring:
           '[/**]':
             allowedOrigins: "*"
             allowedMethods:
-            - DELETE, GET, OPTIONS, PATCH, POST
+            - DELETE
+            - GET
+            - OPTIONS
+            - PATCH
+            - POST
       discovery:
         locator:
           enabled: true
