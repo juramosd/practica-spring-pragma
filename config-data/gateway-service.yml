@@ -33,7 +33,7 @@ spring:
         - id: customer-service_all
           uri: lb://customer-service
           predicates:
-            - Path=/customers/get/
+            - Path=/customers/
           filters:
           - name: PhotoCircuitBreaker
             args:
@@ -42,7 +42,7 @@ spring:
         - id: customer-service
           uri: lb://customer-service
           predicates:
-            - Path=/customers/get/**
+            - Path=/customers/**
         - id: photo-service
           uri: lb://photo-service
           predicates:
