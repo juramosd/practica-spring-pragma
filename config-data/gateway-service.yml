@@ -30,7 +30,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: customer-service_all
+        - id: customer-service
           uri: lb://customer-service
           predicates:
             - Path=/customers/**
@@ -46,6 +46,6 @@ spring:
         - id: photos-fallback
           uri: lb://customer-service
           predicates:
-            - Path=/photo-fallback
+            - Path=/photo-fallback/**
 
         
