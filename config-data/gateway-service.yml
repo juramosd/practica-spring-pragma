@@ -30,15 +30,19 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: customer-service_all
+          uri: lb://customer-service
+          predicates:
+            - Path=/customers/get/
+          filters:
+          - name: PhotoCircuitBreaker
+            args:
+              name: photoCircuitBreaker
+              fallbackUri: forward:/photo-fallback
         - id: customer-service
           uri: lb://customer-service
           predicates:
-            - Path=/customers/**
-          #filters:
-          #- name: CustomerCircuitBreaker
-          #  args:
-          #    name: customerCircuitBreaker
-          #    fallbackUri: forward:/customer-fallback
+            - Path=/customers/get/**
         - id: photo-service
           uri: lb://photo-service
           predicates:
