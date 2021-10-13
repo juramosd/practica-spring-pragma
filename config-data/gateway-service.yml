@@ -35,7 +35,7 @@ spring:
           predicates:
             - Path=/customers/
           filters:
-            - name: PhotoCircuitBreaker
+            - name: CircuitBreaker
               args:
                 name: photoCircuitBreaker
                 fallbackUri: forward:/photo-fallback
