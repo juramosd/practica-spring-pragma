@@ -46,6 +46,6 @@ spring:
         - id: photos-fallback
           uri: lb://customer-service
           predicates:
-            - Path=/fallback
+            - Path=/photo-fallback
 
         
