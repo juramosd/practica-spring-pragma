@@ -43,5 +43,9 @@ spring:
               args:
                 name: photoCircuitBreaker
                 fallbackUri: forward:/photo-fallback
+        - id: photos-fallback
+          uri: lb://customer-service
+          predicates:
+            - Path=/fallback
 
         
