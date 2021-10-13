@@ -33,24 +33,15 @@ spring:
         - id: customer-service_all
           uri: lb://customer-service
           predicates:
-            - Path=/customers/
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: photoCircuitBreaker
-                fallbackUri: forward:/photo-fallback
-        - id: customer-service
-          uri: lb://customer-service
-          predicates:
             - Path=/customers/**
         - id: photo-service
           uri: lb://photo-service
           predicates:
             - Path=/photos/**
-          #filters:
-          #- name: PhotoCircuitBreaker
-          #  args:
-          #    name: photoCircuitBreaker
-          #    fallbackUri: forward:/photo-fallback
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: photoCircuitBreaker
+                fallbackUri: forward:/photo-fallback
 
         
