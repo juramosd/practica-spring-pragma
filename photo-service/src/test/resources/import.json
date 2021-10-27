@@ -1,0 +1,18 @@
+[{ "_id_image" : "45224817",
+     "_name_file" : "image1.jpg",
+     "_type_file" : "image",
+     "_content_file" : "dsadsadsad",
+     "_create_at" : "2020-01-01",
+     "_state" : "CREATED",
+  "_class": "co.com.pragma.photoservice.domain.entity.CustomerPhoto"
+},
+{ "_id_image" : "45224816",
+          "_name_file" : "image2.jpg",
+          "_type_file" : "image",
+          "_content_file" : "dsadsadsad",
+          "_create_at" : "2020-01-01",
+          "_state" : "CREATED",
+  "_class": "co.com.pragma.photoservice.domain.entity.CustomerPhoto"
+
+ }
+]
