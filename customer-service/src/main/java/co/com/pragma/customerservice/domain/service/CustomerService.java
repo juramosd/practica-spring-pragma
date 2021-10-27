@@ -15,7 +15,7 @@ import java.util.Optional;
 public class CustomerService implements ICustomerService {
 
     @Autowired
-    @Qualifier("repositoryFeign")
+    @Qualifier("repositoryFeignWebFlux")
     private ICustomerRepository customerRepository;
 
     @Override
@@ -40,6 +40,11 @@ public class CustomerService implements ICustomerService {
     @Override
     public Optional<CustomerDto> getCustomer(Long id) {
         return  customerRepository.getCustomer(id);
+    }
+
+    @Override
+    public Optional<CustomerDto> getCustomerIdentification(String id) {
+        return customerRepository.getCustomerIdentification(id);
     }
 
     @Override

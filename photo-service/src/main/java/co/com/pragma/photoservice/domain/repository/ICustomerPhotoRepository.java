@@ -15,4 +15,5 @@ public interface ICustomerPhotoRepository {
     Optional<CustomerPhotoDto> save(CustomerPhotoDto customerDto);
     Optional<CustomerPhotoDto> modify(CustomerPhotoDto customerDto);
     Optional<CustomerPhotoDto> delete(CustomerPhotoDto customerDto);
+    Optional<CustomerPhotoDto> deleteBD(CustomerPhotoDto customerDto);
 }

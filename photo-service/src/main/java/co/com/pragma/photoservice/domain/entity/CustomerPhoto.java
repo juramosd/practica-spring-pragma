@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.Date;
+
 
 @Document(collection = "customer_images")
 @Data
@@ -24,6 +26,15 @@ public class CustomerPhoto {
     @Field("name_file")
     private String nameFile;
 
+    @Field("type_file")
+    private String typeFile;
+
+    @Field("state")
+    private String state;
+
     @Field("content_file")
     private byte[] contentFile;
+
+    @Field(name = "create_at")
+    private Date createAt;
 }

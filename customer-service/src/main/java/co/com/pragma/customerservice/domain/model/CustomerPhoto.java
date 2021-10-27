@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class CustomerPhoto {
     private String idPhoto;
     private String nameFile;
+    private String typeFile;
     private byte[] contentFile;
 }

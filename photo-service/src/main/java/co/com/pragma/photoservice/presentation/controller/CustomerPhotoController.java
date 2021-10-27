@@ -32,10 +32,10 @@ public class CustomerPhotoController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CustomerPhotoDto> getProductCustomerPhoto(@PathVariable("id") String id) {
+    public ResponseEntity<CustomerPhotoDto> getCustomerPhoto(@PathVariable("id") String id) {
         Optional<CustomerPhotoDto> customers = customerService.getCustomerPhoto(id);
 
-        if (customers == null) {
+        if (customers.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -43,29 +43,29 @@ public class CustomerPhotoController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerPhotoDto> createCustomerPhoto(@RequestBody CustomerPhotoDto customer){
+    public ResponseEntity<CustomerPhotoDto> createCustomerPhoto(@RequestBody CustomerPhotoDto customer) {
         Optional<CustomerPhotoDto> customerDB = customerService.create(customer);
-        return  ResponseEntity.status( HttpStatus.CREATED).body(customerDB.get());
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerDB.get());
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable("id") String id, @RequestBody CustomerPhotoDto customer) {
         Optional<CustomerPhotoDto> currentCustomer = customerService.getCustomerPhoto(id);
-        if ( null == currentCustomer ) {
-            return  ResponseEntity.notFound().build();
+        if (currentCustomer.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
         customer.setIdPhoto(id);
-        currentCustomer=customerService.update(customer);
-        return  ResponseEntity.ok(currentCustomer);
+        currentCustomer = customerService.update(customer);
+        return ResponseEntity.ok(currentCustomer);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<CustomerPhotoDto> deleteCustomer(@PathVariable("id") String id) {
         Optional<CustomerPhotoDto> customer = customerService.getCustomerPhoto(id);
-        if ( null == customer ) {
-            return  ResponseEntity.notFound().build();
+        if (customer.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
         customer = customerService.delete(customer.get());
-        return  ResponseEntity.ok(customer.get());
+        return ResponseEntity.ok(customer.get());
     }
 }

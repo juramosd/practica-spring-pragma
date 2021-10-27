@@ -8,10 +8,15 @@ import co.com.pragma.customerservice.domain.repository.ICustomerRepository;
 import co.com.pragma.customerservice.infraestructure.crud.ICustomerCrudRepository;
 import co.com.pragma.customerservice.infraestructure.feign.ICustomerPhotoFeign;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Flux;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Repository("repositoryFeign")
@@ -28,6 +33,7 @@ public class CustomerRepository implements ICustomerRepository {
     public List<CustomerDto> getAll() {
         List<Customer> customers = (List<Customer>)customerCrudRepository.findAll();
         List<CustomerPhoto> images = customerFeign.listAllCustomersPhotos().getBody();
+
         List<CustomerDto> customersDto =  customerMapper.toCustomersDto(customers);
         if(!images.get(0).getIdPhoto().contentEquals("none")){
             customersDto.forEach(customerDto -> {
@@ -45,6 +51,7 @@ public class CustomerRepository implements ICustomerRepository {
     public Optional<CustomerDto> getCustomer(Long customerId) {
         return  customerCrudRepository.findById(customerId).map(e -> {
             var imageCustomer = customerFeign.getCustomerPhoto(e.getIdentification());
+
             var dto = customerMapper.toCustomerDTo(e);
             if(imageCustomer!=null){
                 dto.setPhoto(imageCustomer.getBody());
@@ -58,6 +65,7 @@ public class CustomerRepository implements ICustomerRepository {
         Customer customerBD = customerCrudRepository.findByIdentification(customerDto.getIdentification());
         if(customerBD != null){
             CustomerPhoto photo = customerFeign.getCustomerPhoto(customerDto.getIdentification()).getBody();
+
             if(!photo.getIdPhoto().contentEquals("none")){
                 photo.setIdPhoto(customerDto.getIdentification());
                 photo.setNameFile(customerDto.getPhoto().getNameFile());
@@ -139,5 +147,15 @@ public class CustomerRepository implements ICustomerRepository {
         }
 
         return customerMapper.toCustomersDto(customers);
+    }
+
+    @Override
+    public Optional<CustomerDto> getCustomerIdentification(String id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CustomerDto> deleteBD(CustomerDto customerDto) {
+        return Optional.empty();
     }
 }

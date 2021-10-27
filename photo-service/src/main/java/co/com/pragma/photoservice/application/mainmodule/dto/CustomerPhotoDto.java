@@ -17,5 +17,7 @@ public class CustomerPhotoDto {
     @Indexed(unique = true)
     private String nameFile;
 
+    private String typeFile;
+
     private byte[] contentFile;
 }

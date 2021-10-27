@@ -13,4 +13,6 @@ public interface ICustomerRepository {
     Optional<CustomerDto> modify(CustomerDto customerDto);
     Optional<CustomerDto> delete(CustomerDto customerDto);
     List<CustomerDto> findByAgeGreaterThanEqual(int age);
+    Optional<CustomerDto> getCustomerIdentification(String id);
+    Optional<CustomerDto> deleteBD(CustomerDto customerDto);
 }

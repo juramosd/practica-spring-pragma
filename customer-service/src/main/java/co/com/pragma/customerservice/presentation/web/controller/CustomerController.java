@@ -52,31 +52,31 @@ public class CustomerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDto customer) {
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") String id, @RequestBody CustomerDto customer) {
 
-        Optional<CustomerDto> currentCustomer = customerService.getCustomer(id);
+        Optional<CustomerDto> currentCustomer = customerService.getCustomerIdentification(id);
 
-        if (null == currentCustomer) {
+        if (!currentCustomer.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        customer.setCustomerId(id);
+        customer.setCustomerId(currentCustomer.get().getCustomerId());
         currentCustomer = customerService.updateCustomer(customer);
         return ResponseEntity.ok(currentCustomer.get());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("id") Long id) {
-        Optional<CustomerDto> invoice  = customerService.getCustomer(id);
-        if (null == invoice) {
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("id") String id) {
+        Optional<CustomerDto> invoice  = customerService.getCustomerIdentification(id);
+        if (invoice == null) {
             return  ResponseEntity.notFound().build();
         }
         return  ResponseEntity.ok(invoice.get());
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<CustomerDto> deleteCustomer(@PathVariable("id") Long id) {
-        Optional<CustomerDto> customer = customerService.getCustomer(id);
-        if (null == customer) {
+    public ResponseEntity<CustomerDto> deleteCustomer(@PathVariable("id") String id) {
+        Optional<CustomerDto> customer = customerService.getCustomerIdentification(id);
+        if (!customer.isPresent()) {
             return ResponseEntity.notFound().build();
         }
         customer = customerService.deleteCustomer(customer.get());

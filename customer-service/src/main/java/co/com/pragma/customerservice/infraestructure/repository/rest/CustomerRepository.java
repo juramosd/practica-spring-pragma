@@ -96,4 +96,14 @@ public class CustomerRepository implements ICustomerRepository {
         List<Customer> customers = (List<Customer>)customerCrudRepository.findByAgeGreaterThanEqual(age);
         return customerMapper.toCustomersDto(customers);
     }
+
+    @Override
+    public Optional<CustomerDto> getCustomerIdentification(String id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CustomerDto> deleteBD(CustomerDto customerDto) {
+        return Optional.empty();
+    }
 }

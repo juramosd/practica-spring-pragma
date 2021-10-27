@@ -20,6 +20,10 @@ public interface ICustomerPhotoMapper {
 
     List<CustomerPhotoDto> toCustomersDto(List<CustomerPhoto> customers);
 
+    @Mappings({
+            @Mapping(target = "createAt", ignore = true),
+            @Mapping(target = "state", ignore = true)
+    })
     @InheritInverseConfiguration
     CustomerPhoto toCustomer(CustomerPhotoDto customerDto);
 }

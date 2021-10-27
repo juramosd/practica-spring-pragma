@@ -12,5 +12,6 @@ public interface ICustomerService {
     Optional<CustomerDto> updateCustomer(CustomerDto customer);
     Optional<CustomerDto> deleteCustomer(CustomerDto customer);
     Optional<CustomerDto> getCustomer(Long id);
+    Optional<CustomerDto> getCustomerIdentification(String id);
     List<CustomerDto> getCustomerAgeMax(int age);
 }

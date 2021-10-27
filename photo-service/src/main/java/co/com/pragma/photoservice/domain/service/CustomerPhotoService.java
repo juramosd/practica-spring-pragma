@@ -4,7 +4,9 @@ package co.com.pragma.photoservice.domain.service;
 import co.com.pragma.photoservice.application.mainmodule.dto.CustomerPhotoDto;
 import co.com.pragma.photoservice.application.mainmodule.service.ICustomerPhotoService;
 import co.com.pragma.photoservice.domain.repository.ICustomerPhotoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Optional;
 public class CustomerPhotoService implements ICustomerPhotoService {
 
     @Autowired
-    ICustomerPhotoRepository customerRepository;
+    private ICustomerPhotoRepository customerRepository;
 
     @Override
     public List<CustomerPhotoDto> getAll() {
@@ -44,5 +46,10 @@ public class CustomerPhotoService implements ICustomerPhotoService {
     @Override
     public Optional<CustomerPhotoDto> delete(CustomerPhotoDto customer) {
         return customerRepository.delete(customer);
+    }
+
+    @Override
+    public Optional<CustomerPhotoDto> deleteBD(CustomerPhotoDto customer) {
+        return customerRepository.deleteBD(customer);
     }
 }

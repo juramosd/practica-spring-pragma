@@ -14,5 +14,6 @@ public interface ICustomerPhotoService {
     Optional<CustomerPhotoDto> getCustomerPhoto(String id);
     Optional<CustomerPhotoDto> update(CustomerPhotoDto customer);
     Optional<CustomerPhotoDto> delete(CustomerPhotoDto customer);
+    Optional<CustomerPhotoDto> deleteBD(CustomerPhotoDto customer);
 
 }
